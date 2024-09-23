@@ -1,0 +1,126 @@
+/* Main CSS Styles */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: "Roboto Mono", monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-color);
+}
+
+a {
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: var(--primary-hover-color);
+}
+
+button {
+  background-color: var(--primary-hover-color);
+  color: var(--background-color);
+  width: 150px;
+  height: 40px;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 18px;
+}
+
+button:hover {
+  background-color: var(--secondary-hover-color);
+}
+
+button.disabled {
+  background-color: var(--disabled-bg-color);
+  color: var(--disabled-text-color);
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background-color: var(--secondary-color);
+  color: var(--background-color);
+}
+
+.section-background {
+  background-color: var(--section-bg-color);
+  padding: 20px;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid var(--input-border-color);
+}
+
+input[type="number"] {
+  border: none;
+  border-bottom: 1px solid var(--input-border-color);
+  width: 50px;
+}
+
+input[type="radio"] {
+  margin-left: 10px;
+}
+
+.radio-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+
+label {
+  font-family: "fredoka one", sans-serif;
+  font-weight: 500;
+  font-size: 30px;
+  color: var(--text-color);
+}
+
+.radio-option {
+  font-size: 2rem;
+}
+
+.content-container {
+  /*min-height: calc(100vh - 200px);*/
+  width: 100%;
+}
+
+/* CSS for Checkbox Group */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  direction: rtl; /* Ensure right-to-left text direction */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-left: 10px;
+}
+
+.checkbox-group label {
+  cursor: pointer;
+  margin: 0;
+  text-align: right;
+}
+
+.page-container {
+  margin-top: 3rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,42 @@
+.footer-container {
+  background-color: #fff;
+  display: flex;
+  padding: 20px 0;
+  height: 30rem;
+  color: black;
+  justify-content: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  direction: rtl;
+}
+
+.five-column {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8rem;
+}
+
+.footer-item p {
+  direction: rtl;
+}
+
+.footer-item h2 {
+  top: 3rem;
+  color: var(--color-question);
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.footer-contact {
+  margin: auto auto;
+  margin-top: 2rem;
+
+  justify-content: center;
+  align-items: center;
+}

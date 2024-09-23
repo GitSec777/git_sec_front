@@ -1,0 +1,62 @@
+.report-page {
+  margin-top: 10rem;
+}
+
+.organization-header {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.grid-container {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.grid-header {
+  grid-column: -1/1;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.yes {
+  color: green;
+}
+
+.no {
+  color: red;
+}
+
+.non-compliant {
+  color: red;
+}
+
+.report-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.report-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.permission-section {
+  margin-top: 2rem;
+  height: fit-content;
+  padding: 1rem;
+  border: 3px solid var(--secondary-color);
+  border-radius: 1rem;
+  background-color: grey;
+  box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,32 @@
+/* global.css */
+:root {
+  --background-color: #000000; /* Deep black for a classic hacker look */
+  --text-color: #00ff00; /* Bright green for text, reminiscent of old terminal screens */
+  --primary-color: #ff4500; /* Bright orange for primary elements */
+  --primary-hover-color: #ff6347; /* Lighter orange for hover effects */
+  --secondary-color: #00ff00; /* Green for secondary elements */
+  --secondary-hover-color: #00cc00; /* Slightly darker green for hover effects */
+  --disabled-bg-color: #666666; /* Dark gray for disabled elements */
+  --disabled-text-color: #333333; /* Even darker gray for text on disabled elements */
+  --section-bg-color: #1a1a1a; /* Dark gray for sections */
+  --input-border-color: #00ff00; /* Bright green for input borders */
+  --question-color: #ff4500; /* Bright orange for questions or prompts */
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Colors */
+  --color-primary: #3498db;
+  --color-secondary: #2ecc71;
+  --color-danger: #e74c3c;
+  --color-warning: #f1c40f;
+  --color-info: #1abc9c;
+  --color-light: #ecf0f1;
+  --color-dark: #2c3e50;
+
+  overflow-x: hidden;
+}
