@@ -1,0 +1,46 @@
+.repo-report {
+  font-family: "Courier New", Courier, monospace;
+  color: #00ff00; /* Bright green text */
+  padding: 20px;
+  background-color: #000; /* Black background */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 255, 0, 0.1); /* Green shadow */
+}
+
+.repo-report h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #00ff00; /* Bright green text */
+}
+
+.report-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.repo-report-details,
+.permission-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.report-section {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #111; /* Dark background */
+  border: 1px solid #00ff00; /* Green border */
+  border-radius: 4px;
+}
+
+.report-section strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #00ff00; /* Bright green text */
+}
+
+.permission-section h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #00ff00; /* Bright green text */
+}

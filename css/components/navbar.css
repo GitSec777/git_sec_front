@@ -28,6 +28,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
 }
 
 .navbar .logo {
@@ -52,6 +53,7 @@
   color: var(--primary-color);
   text-decoration: none;
   font-size: 1rem;
+  cursor: pointer;
   padding: var(--spacing-xs) var(--spacing-sm);
   transition: background-color 0.3s ease, color 0.3s ease;
 }

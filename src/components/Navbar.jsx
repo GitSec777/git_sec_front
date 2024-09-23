@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "./../../css/main.css";
 import { Link } from "react-router-dom";
-import Logo from "../images/logo.svg";
+import Login from "../pages/Login";
+import Logo from "./Logo";
+
 function Navbar() {
   console.log("Navbar");
   return (
@@ -11,23 +13,29 @@ function Navbar() {
           <div>
             <Link to="/" className="logo">
               <div className="logo-container flex-row">
-                <img src={Logo} alt="" />
-                <h2>Git Security</h2>
+                <Logo width={50} height={50} />
+                <h2>GitSec</h2>
               </div>
             </Link>
           </div>
-          <ul className="nav-links">
-            <li>
-              <Link to="/report">Report</Link>
-            </li>
-            <li>
-              <Link to="/recommendations">Security Recommendation</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
         </div>
+        <ul className="nav-links">
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/selection">Selection</Link>
+          </li>
+          <li>
+            <Link to="/report">Report</Link>
+          </li>
+          <li>
+            <Link to="/recommendations">Security Recommendation</Link>
+          </li>
+          <li>
+            <Login />
+          </li>
+        </ul>
       </nav>
     </>
   );

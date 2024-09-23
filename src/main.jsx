@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import Layout from "./pages/Layout.jsx";
 import Report from "./components/report.jsx";
 import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+import Recommendations from "./pages/Recommendations.jsx";
 import SelectionPage from "./pages/SelectionPage.jsx";
 import GitHubCallback from "./components/GitHubCallback.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -14,11 +16,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Login />, // Default home route (could be SelectionPage or Login instead)
+        element: <Home />,
       },
       {
         path: "/report",
         element: <Report />,
+      },
+      {
+        path: "/recommendations",
+        element: <Recommendations />,
       },
       {
         path: "/login",

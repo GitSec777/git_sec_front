@@ -1,107 +1,89 @@
 import React from "react";
 import InfoButton from "./InfoButton";
+import "../../css/components/OrgReport.css";
 
 const OrgReport = ({ data }) => {
-  // Helper function to assign compliant or non-compliant class
-
-  const getComplianceClass = (condition) =>
-    condition ? "compliant" : "non-compliant";
-
   return (
-    <div className="org-report">
-      <h2>Organization Report: {data.login}</h2>
-      <div className="org-report-details">
-        {/* Two-Factor Authentication */}
-        <div
-          className={`report-section ${getComplianceClass(
-            data.two_factor_requirement_enabled
-          )}`}
-        >
-          <InfoButton infoText="Two-factor authentication is a security feature that helps protect your account from unauthorized access." />
-          <strong>Two-Factor Requirement Enabled:</strong>{" "}
-          {data.two_factor_requirement_enabled ? "Yes" : "No"}
-        </div>
-
-        {/* Members Can Fork Private Repositories */}
-        <div
-          className={`report-section ${getComplianceClass(
-            !data.members_can_fork_private_repositories
-          )}`}
-        >
-          <InfoButton infoText="Allowing members to fork private repositories can increase the risk of data exposure." />
-          <strong>Members Can Fork Private Repositories:</strong>{" "}
-          {data.members_can_fork_private_repositories ? "Yes" : "No"}
-        </div>
-
-        {/* Web Commit Signoff Required */}
-        <div
-          className={`report-section ${getComplianceClass(
-            data.web_commit_signoff_required
-          )}`}
-        >
-          <InfoButton infoText="Requiring web commit signoff can help ensure that all commits are authorized." />
-          <strong>Web Commit Signoff Required:</strong>{" "}
-          {data.web_commit_signoff_required ? "Yes" : "No"}
-        </div>
-
-        {/* Members Allowed Repository Creation Type */}
-        <div className={`report-section`}>
-          <InfoButton infoText="Restricting repository creation types can help maintain organization standards." />
-          <strong>Members Allowed Repository Creation Type:</strong>{" "}
-          {data.members_allowed_repository_creation_type}
-        </div>
-
-        {/* Organization Verification */}
-        <div
-          className={`report-section ${getComplianceClass(data.is_verified)}`}
-        >
-          <InfoButton infoText="Verified organizations have confirmed their identity with GitHub." />
-          <strong>Organization Verified:</strong>{" "}
-          {data.is_verified ? "Yes" : "No"}
-        </div>
-
-        {/* Owned Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Owned private repositories are repositories owned by the organization." />
-          <strong>Owned Private Repositories:</strong>{" "}
-          {data.owned_private_repos}
-        </div>
-
-        {/* Total Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Total private repositories are the sum of owned and private repositories." />
-          <strong>Total Private Repositories:</strong>{" "}
-          {data.total_private_repos}
-        </div>
-
-        {/* Plan Name */}
-        <div className="report-section">
-          <InfoButton infoText="The plan name indicates the organization's GitHub subscription level." />
-          <strong>Plan Name:</strong> {data.plan_name}
-        </div>
-
-        {/* Filled Seats */}
-        <div className="report-section">
-          <infoButton infoText="Filled seats are the number of users in the organization." />
-          <strong>Filled Seats:</strong> {data.filled_seats}
-        </div>
-
-        {/* Plan Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Plan private repositories are the number of private repositories allowed by the organization's GitHub subscription level." />
-          <strong>Plan Private Repositories:</strong> {data.plan_private_repos}
-        </div>
-
-        {/* Organization Created At */}
-        <div className="report-section">
-          <strong>Created At:</strong>{" "}
-          {new Date(data.created_at).toLocaleDateString()}
-        </div>
-
-        {/* Organization Updated At */}
-        <div className="report-section">
-          <strong>Updated At:</strong>{" "}
-          {new Date(data.updated_at).toLocaleDateString()}
+    <div classNa me="org-report">
+      <h1 className="glitch" data-text="Organization Report">
+        Organization Report
+      </h1>
+      <div className="report-container">
+        <div className="org-report-details">
+          <div className="report-section">
+            <strong>Organization Login:</strong> {data.login}
+          </div>
+          <div className="report-section">
+            <strong>URL:</strong> <a href={data.url}>{data.url}</a>
+          </div>
+          <div className="report-section">
+            <strong>HTML URL:</strong>{" "}
+            <a href={data.html_url}>{data.html_url}</a>
+          </div>
+          <div className="report-section">
+            <strong>Created At:</strong>{" "}
+            {new Date(data.created_at).toLocaleString()}
+          </div>
+          <div className="report-section">
+            <strong>Updated At:</strong>{" "}
+            {new Date(data.updated_at).toLocaleString()}
+          </div>
+          <div className="report-section">
+            <strong>Public Repositories:</strong> {data.public_repos}
+          </div>
+          <div className="report-section">
+            <strong>Owned Private Repositories:</strong>{" "}
+            {data.owned_private_repos}
+          </div>
+          <div className="report-section">
+            <strong>Total Private Repositories:</strong>{" "}
+            {data.total_private_repos}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="Two-factor authentication adds an extra layer of security to your account." />
+            <strong>Two-Factor Requirement Enabled:</strong>{" "}
+            {data.two_factor_requirement_enabled ? "Yes" : "No"}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="Controls the type of repositories members can create. Restricting this can prevent unauthorized repository creation." />
+            <strong>Members Allowed Repository Creation Type:</strong>{" "}
+            {data.members_allowed_repository_creation_type}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="Allows members to fork private repositories, which can expose sensitive information. Consider disabling for private repos." />
+            <strong>Members Can Fork Private Repositories:</strong>{" "}
+            {data.members_can_fork_private_repositories ? "Yes" : "No"}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="Requiring signoff adds accountability and can help track changes for security audits." />
+            <strong>Web Commit Signoff Required:</strong>{" "}
+            {data.web_commit_signoff_required ? "Yes" : "No"}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="Verification indicates that the organization is legitimate and trusted." />
+            <strong>Is Verified:</strong> {data.is_verified ? "Yes" : "No"}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="The plan name indicates the subscription level of the organization." />
+            <strong>Plan Name:</strong> {data.plan_name}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="The number of filled seats indicates how many members are using the organization's plan." />
+            <strong>Filled Seats:</strong> {data.filled_seats}
+          </div>
+          <div className="report-section">
+            <InfoButton infoText="The number of private repositories allowed by the organization's plan." />
+            <strong>Plan Private Repositories:</strong>{" "}
+            {data.plan_private_repos}
+          </div>
+          <div className="report-section">
+            <strong>Members URL:</strong>{" "}
+            <a href={data.members_url}>{data.members_url}</a>
+          </div>
+          <div className="report-section">
+            <strong>Repositories URL:</strong>{" "}
+            <a href={data.repos_url}>{data.repos_url}</a>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../../css/pages/SelectionPage.css";
 
 const SelectionPage = () => {
   const [repos, setRepos] = useState([]);
@@ -35,7 +36,6 @@ const SelectionPage = () => {
           setRepos(repoResponse.data);
           setOrgs(orgResponse.data);
 
-          // Cache the fetched data in localStorage
           localStorage.setItem("reposData", JSON.stringify(repoResponse.data));
           localStorage.setItem("orgsData", JSON.stringify(orgResponse.data));
         }
@@ -51,8 +51,6 @@ const SelectionPage = () => {
   }, []);
 
   const handleOrgClick = (org) => {
-    console.log(`Navigate to /report/org/${org.login}`);
-
     navigate(`/report/org/${org.login}`);
   };
 
@@ -60,42 +58,54 @@ const SelectionPage = () => {
     navigate(`/report/repo/${repo.full_name.replace(/\//g, "-")}`);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (loading) return <div className="loading">Initializing...</div>;
+  if (error) return <div className="error">Error: {error.message}</div>;
 
   return (
     <div className="selection-page">
-      <h1>Select Organization or Repository</h1>
-      <section>
-        <h2>Organizations</h2>
-        {orgs.length > 0 ? (
-          <ul>
-            {orgs.map((org) => (
-              <li key={org.id} onClick={() => handleOrgClick(org)}>
-                {org.login}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No organizations found.</p>
-        )}
-      </section>
+      <h1 className="glitch" data-text="Select Target">
+        Select Target
+      </h1>
+      <div className="selection-container">
+        <section className="selection-section">
+          <h2 className="section-title">Organizations</h2>
+          {orgs.length > 0 ? (
+            <ul className="selection-list">
+              {orgs.map((org) => (
+                <li
+                  key={org.id}
+                  onClick={() => handleOrgClick(org)}
+                  className="selection-item"
+                >
+                  <span className="item-icon">&#128421;</span> {org.login}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">No organizations found.</p>
+          )}
+        </section>
 
-      <section>
-        <h2>Repositories</h2>
-        {repos.length > 0 ? (
-          <ul>
-            {repos.map((repo) => (
-              <li key={repo.id} onClick={() => handleRepoClick(repo)}>
-                {repo.name} - <strong>Owner:</strong> {repo.owner.login}{" "}
-                {/* Show owner info */}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No repositories found.</p>
-        )}
-      </section>
+        <section className="selection-section">
+          <h2 className="section-title">Repositories</h2>
+          {repos.length > 0 ? (
+            <ul className="selection-list">
+              {repos.map((repo) => (
+                <li
+                  key={repo.id}
+                  onClick={() => handleRepoClick(repo)}
+                  className="selection-item"
+                >
+                  <span className="item-icon">&#128194;</span> {repo.name}
+                  <span className="item-owner">Owner: {repo.owner.login}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">No repositories found.</p>
+          )}
+        </section>
+      </div>
     </div>
   );
 };
