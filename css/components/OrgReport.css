@@ -1,46 +1,112 @@
 .org-report {
   font-family: "Courier New", Courier, monospace;
-  color: #00ff00; /* Bright green text */
+  color: #00ff00;
   padding: 20px;
-  background-color: #000; /* Black background */
+  background-color: #000;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 255, 0, 0.1); /* Green shadow */
+  box-shadow: 0 2px 4px rgba(0, 255, 0, 0.1);
+  max-width: 100%; /* Ensure the report doesn't overflow */
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
 }
 
 .org-report h2 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #00ff00; /* Bright green text */
+  color: #00ff00;
 }
 
 .report-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  max-width: 100%; /* Ensure the container doesn't overflow */
 }
 
-.org-report-details,
-.permission-section {
+.org-report-details {
   flex: 1;
   min-width: 300px;
+  max-width: 100%; /* Ensure the sections don't overflow */
 }
 
 .report-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
   padding: 10px;
-  background-color: #111; /* Dark background */
-  border: 1px solid #00ff00; /* Green border */
+  background-color: #111;
+  border: 1px solid #00ff00;
   border-radius: 4px;
+  max-width: 100%; /* Ensure the sections don't overflow */
+}
+
+.report-content {
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
 .report-section strong {
-  display: block;
-  margin-bottom: 5px;
-  color: #00ff00; /* Bright green text */
+  display: inline;
+  margin-right: 5px;
+  color: #00ff00;
+}
+
+.insecure {
+  color: #ff0000;
+}
+
+.permission-section {
+  flex: 1;
+  min-width: 300px;
+  max-width: 100%; /* Ensure the sections don't overflow */
 }
 
 .permission-section h3 {
   font-size: 20px;
   margin-bottom: 15px;
-  color: #00ff00; /* Bright green text */
+  color: #00ff00;
+}
+
+@media (max-width: 768px) {
+  .report-container {
+    flex-direction: column;
+  }
+
+  .report-section {
+    padding: 5px;
+  }
+
+  .org-report h2 {
+    font-size: 20px;
+  }
+
+  .report-section strong {
+    font-size: 16px;
+  }
+
+  .permission-section h3 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .org-report {
+    padding: 10px;
+  }
+
+  .report-section {
+    padding: 5px;
+  }
+
+  .org-report h2 {
+    font-size: 18px;
+  }
+
+  .report-section strong {
+    font-size: 14px;
+  }
+
+  .permission-section h3 {
+    font-size: 16px;
+  }
 }

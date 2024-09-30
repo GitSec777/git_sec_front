@@ -37,6 +37,7 @@ const SelectionPage = () => {
           setOrgs(orgResponse.data);
 
           localStorage.setItem("reposData", JSON.stringify(repoResponse.data));
+          console.log("orgsData:", orgResponse.data);
           localStorage.setItem("orgsData", JSON.stringify(orgResponse.data));
         }
       } catch (error) {

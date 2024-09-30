@@ -17,61 +17,68 @@ const Logo = ({ width = 200, height = 200 }) => (
           80% { transform: translate(2px, 2px); }
           100% { transform: translate(0, 0); }
         }
-        .logo-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 80px; }
+        .logo-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 40px; }
         .glitch-effect { animation: glitch 0.5s infinite; }
       `}
     </style>
 
     <defs>
-      <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style={{ stopColor: "#00ff00", stopOpacity: 1 }} />
-        <stop offset="100%" style={{ stopColor: "#008000", stopOpacity: 1 }} />
+      <linearGradient id="maskGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style={{ stopColor: "#8B4513", stopOpacity: 1 }} />
+        <stop offset="100%" style={{ stopColor: "#D2691E", stopOpacity: 1 }} />
       </linearGradient>
     </defs>
 
     <rect width="100%" height="100%" fill="#000000" />
 
+    {/* Mask shape */}
+    <path
+      d="M100 20 
+         C 60 40, 40 80, 40 120 
+         C 40 160, 60 180, 100 180 
+         C 140 180, 160 160, 160 120 
+         C 160 80, 140 40, 100 20 
+         Z"
+      fill="url(#maskGradient)"
+      className="glitch-effect"
+    />
+
+    {/* Eyes */}
     <g className="glitch-effect">
-      <text x="50" y="120" fill="url(#neonGradient)" className="logo-text">
-        GS
+      <text x="70" y="100" fill="#00ff00" className="logo-text">
+        G
       </text>
-      <path
-        d="M140,80 v40 h30 v-40 h-30 M140,100 h30"
-        stroke="url(#neonGradient)"
-        strokeWidth="8"
-        fill="none"
-      />
+      <text x="110" y="100" fill="#00ff00" className="logo-text">
+        S
+      </text>
     </g>
 
-    <circle cx="155" cy="90" r="5" fill="#00ff00" className="glitch-effect" />
+    {/* Mouth */}
+    <path
+      d="M70 140 
+         C 90 160, 110 160, 130 140"
+      stroke="#00ff00"
+      strokeWidth="4"
+      fill="none"
+      className="glitch-effect"
+    />
 
+    {/* Decorative lines */}
+    <g stroke="#00ff00" strokeWidth="2" opacity="0.5">
+      <line x1="40" y1="60" x2="160" y2="60" />
+      <line x1="30" y1="100" x2="170" y2="100" />
+      <line x1="40" y1="140" x2="160" y2="140" />
+    </g>
+
+    {/* Border */}
     <rect
-      x="0"
-      y="0"
-      width="200"
-      height="200"
+      x="10"
+      y="10"
+      width="180"
+      height="180"
       fill="none"
       stroke="#00ff00"
       strokeWidth="4"
-    />
-
-    <line
-      x1="0"
-      y1="0"
-      x2="200"
-      y2="200"
-      stroke="#00ff00"
-      strokeWidth="2"
-      opacity="0.5"
-    />
-    <line
-      x1="200"
-      y1="0"
-      x2="0"
-      y2="200"
-      stroke="#00ff00"
-      strokeWidth="2"
-      opacity="0.5"
     />
   </svg>
 );

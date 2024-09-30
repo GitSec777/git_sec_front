@@ -84,3 +84,29 @@
 .error {
   color: #ff0000;
 }
+
+@media (max-width: 768px) {
+  .selection-container {
+    flex-direction: column;
+  }
+
+  .selection-page h1 {
+    font-size: 36px;
+  }
+
+  .selection-section {
+    padding: 10px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .selection-item {
+    font-size: 16px;
+  }
+
+  .item-owner {
+    font-size: 12px;
+  }
+}
