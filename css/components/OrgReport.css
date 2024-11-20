@@ -110,3 +110,46 @@
     font-size: 16px;
   }
 }
+
+.member-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.member-list li {
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+}
+
+.alerts-section {
+  margin-top: 20px;
+}
+
+.alerts-list {
+  list-style: none;
+  padding: 0;
+}
+
+.alert-item {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  background-color: #111;
+}
+
+.alert-item.critical {
+  border-left: 4px solid #ff0000;
+}
+
+.alert-item.high {
+  border-left: 4px solid #ff6b6b;
+}
+
+.alert-item.moderate {
+  border-left: 4px solid #ffd93d;
+}
+
+.alert-item.low {
+  border-left: 4px solid #4dabf7;
+}

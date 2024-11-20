@@ -1,43 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 
-// Replace these with your actual GitHub OAuth credentials
-const CLIENT_ID = "Ov23limgzh26fACnXFFS";
-const REDIRECT_URI = "http://127.0.0.1:5000/auth/github/callback"; // or your production URL
-
 const Login = ({ onLoginSuccess }) => {
-  const handleGitHubLogin = () => {
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=read:org,user,repo&redirect_uri=${encodeURIComponent(
-      REDIRECT_URI
-    )}`;
-    window.location.href = authUrl;
-  };
-
-  React.useEffect(() => {
-    const fetchUserName = async () => {
+  useEffect(() => {
+    // Check if we're returning from GitHub auth
+    const checkAuthStatus = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:5000/get_user_data",
+          "http://localhost:5000/auth/check-status",
           {
             withCredentials: true,
           }
         );
-        const { name } = response.data;
-        localStorage.setItem("userName", name);
-        localStorage.setItem("isLoggedIn", "true");
-        onLoginSuccess(name);
+        if (response.data.isAuthenticated) {
+          localStorage.setItem("userName", response.data.name);
+          localStorage.setItem("isLoggedIn", "true");
+          onLoginSuccess(response.data.name);
+        }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error checking auth status:", error);
       }
     };
 
     if (localStorage.getItem("isLoggedIn")) {
-      fetchUserName();
+      checkAuthStatus();
     }
   }, [onLoginSuccess]);
 
+  const handleGitHubLogin = (e) => {
+    e.preventDefault();
+    window.location.href = "http://127.0.0.1:5000/auth/github/login";
+  };
+
   return (
-    <a className="navbar-btn" onClick={handleGitHubLogin}>
+    <a href="#" className="navbar-btn" onClick={handleGitHubLogin}>
       Login with GitHub
     </a>
   );

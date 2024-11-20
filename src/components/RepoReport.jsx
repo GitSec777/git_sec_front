@@ -1,8 +1,65 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import InfoButton from "./InfoButton";
 import "../../css/components/RepoReport.css";
+import { githubService } from "../services/githubService";
 
-const RepoReport = ({ data }) => {
+const RepoReport = () => {
+  const { repoId } = useParams();
+  const { selectedOrg, selectedRepo } = useContext(AuthContext);
+  const [data, setData] = useState(null);
+  const navigate = useNavigate(); // Add navigate
+  const [repoData, setRepoData] = useState(null);
+  const [dependabotAlerts, setDependabotAlerts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  console.log("in reop selectedRepo:", selectedRepo);
+  // console.log("in repo orgId:", orgId);
+  console.log("in repo repoId:", repoId);
+
+  useEffect(() => {
+    if (!selectedRepo) {
+      navigate("/selection"); // Redirect if no repo is selected
+      return;
+    }
+
+    const fetchRepoData = async () => {
+      setIsLoading(true);
+      try {
+        console.log("in repo fetchRepoData");
+
+        // Keep existing data
+        setData(selectedRepo);
+        console.log("selectedRepo:", data);
+        // const reportData = await githubService.getRepoReport(
+        //   `${orgId}/${repoId}`,
+        //   selectedOrg.token
+        // );
+        // setRepoData(reportData);
+
+        // Add new data
+        // const alertsData = await githubService.getDependabotAlerts(
+        //   orgId,
+        //   repoId,
+        //   selectedOrg.token
+        // );
+        // setDependabotAlerts(alertsData);
+      } catch (error) {
+        console.error("Error fetching repo data:", error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (selectedRepo && repoId) {
+      fetchRepoData();
+    }
+  }, [repoId, selectedOrg, selectedRepo, navigate]);
+
+  if (!data) return <div className="loading">Loading repository data...</div>;
+
   return (
     <div className="repo-report">
       <h1 className="glitch" data-text="Repository Report">

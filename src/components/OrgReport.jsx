@@ -1,8 +1,57 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import InfoButton from "./InfoButton";
 import "../../css/components/OrgReport.css";
+import { githubService } from "../services/githubService";
 
-const OrgReport = ({ data }) => {
+const OrgReport = () => {
+  const { orgId } = useParams();
+  const { selectedOrg, isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [noMFAMembers, setNoMFAMembers] = useState([]);
+  const [adminMembers, setAdminMembers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!selectedOrg || !isAuthenticated) {
+      navigate("/selection");
+      return;
+    }
+
+    // Updated API calls
+    const fetchOrgData = async () => {
+      setIsLoading(true);
+      try {
+        // Keep existing data fetch
+        setData(selectedOrg);
+
+        // Corrected API calls by removing the extra token parameter
+        const [noMFAData] = await Promise.all([
+          console.log("fetching no mfa data", orgId),
+          githubService.getOrgNoMFAMembers(orgId),
+          // githubService.getOrgAdminMembers(orgId),
+        ]);
+        if (noMFAData) {
+          setNoMFAMembers(noMFAData);
+          console.log("no mfa data is:", noMFAData);
+        }
+        // setAdminMembers(adminData);
+      } catch (error) {
+        console.error("Error fetching org data:", error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrgData();
+  }, [orgId, selectedOrg, navigate, isAuthenticated]);
+
+  if (!data) return <div className="loading">Loading organization data...</div>;
+
   return (
     <div className="org-report">
       <h1 className="glitch" data-text="Organization Report">
@@ -12,7 +61,7 @@ const OrgReport = ({ data }) => {
         <div className="org-report-details">
           <div className="report-section">
             <div className="report-content">
-              <strong>Organization Login:</strong> {data.login}
+              <strong>Organization Login:</strong> {orgId}
             </div>
           </div>
           <div className="report-section">
@@ -133,6 +182,40 @@ const OrgReport = ({ data }) => {
               <strong>Repositories URL:</strong>{" "}
               <a href={data.repos_url}>{data.repos_url}</a>
             </div>
+          </div>
+          <div className="org-report-details">
+            {/* ... existing report sections ... */}
+
+            {/* Add new sections */}
+            <div className="report-section">
+              <div className="report-content">
+                {noMFAMembers && noMFAMembers.length > 0 ? (
+                  <>
+                    <strong>Members Without 2FA:</strong>
+                    <ul className="member-list">
+                      {noMFAMembers.map((member) => (
+                        <li key={member.id}>{member.login}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <div>No members without 2FA</div>
+                )}
+              </div>
+              <InfoButton infoText="Members who haven't enabled two-factor authentication pose a security risk." />
+            </div>
+
+            {/* <div className="report-section">
+              <div className="report-content">
+                <strong>Admin Members:</strong>
+                <ul className="member-list">
+                  {adminMembers.map((member) => (
+                    <li key={member.id}>{member.login}</li>
+                  ))}
+                </ul>
+              </div>
+              <InfoButton infoText="Organization administrators have full access to all repositories and settings." />
+            </div> */}
           </div>
         </div>
       </div>

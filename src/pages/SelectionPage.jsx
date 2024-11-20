@@ -1,67 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
 import "../../css/pages/SelectionPage.css";
 
 const SelectionPage = () => {
-  const [repos, setRepos] = useState([]);
-  const [orgs, setOrgs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { userData, isAuthenticated, setSelectedOrg, setSelectedRepo } =
+    useContext(AuthContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:5000/get_github_token",
-          { withCredentials: true }
-        );
-        const accessToken = response.data.github_token;
-
-        if (accessToken) {
-          const repoResponse = await axios.get(
-            "https://api.github.com/user/repos",
-            {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            }
-          );
-          const orgResponse = await axios.get(
-            "https://api.github.com/user/orgs",
-            {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            }
-          );
-
-          setRepos(repoResponse.data);
-          setOrgs(orgResponse.data);
-
-          localStorage.setItem("reposData", JSON.stringify(repoResponse.data));
-          console.log("orgsData:", orgResponse.data);
-          localStorage.setItem("orgsData", JSON.stringify(orgResponse.data));
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleOrgClick = (org) => {
+    setSelectedOrg(org);
     navigate(`/report/org/${org.login}`);
   };
 
   const handleRepoClick = (repo) => {
-    navigate(`/report/repo/${repo.full_name.replace(/\//g, "-")}`);
+    setSelectedRepo(repo);
+    console.log("repo is:", repo);
+    const encodedRepoName = encodeURIComponent(repo.full_name).replace(
+      /%2F/g,
+      "-"
+    );
+    navigate(`/report/repo/${encodedRepoName}`);
   };
+  console.log("userData is:", userData.orgs);
 
-  if (loading) return <div className="loading">Initializing...</div>;
-  if (error) return <div className="error">Error: {error.message}</div>;
-
+  if (!userData) return <div className="loading">Loading user data...</div>;
+  if (!isAuthenticated) navigate("/login");
   return (
     <div className="selection-page">
       <h1 className="glitch" data-text="Select Target">
@@ -70,9 +34,9 @@ const SelectionPage = () => {
       <div className="selection-container">
         <section className="selection-section">
           <h2 className="section-title">Organizations</h2>
-          {orgs.length > 0 ? (
+          {userData.orgs && userData.orgs.length > 0 ? (
             <ul className="selection-list">
-              {orgs.map((org) => (
+              {userData.orgs.map((org) => (
                 <li
                   key={org.id}
                   onClick={() => handleOrgClick(org)}
@@ -89,9 +53,9 @@ const SelectionPage = () => {
 
         <section className="selection-section">
           <h2 className="section-title">Repositories</h2>
-          {repos.length > 0 ? (
+          {userData.repos && userData.repos.length > 0 ? (
             <ul className="selection-list">
-              {repos.map((repo) => (
+              {userData.repos.map((repo) => (
                 <li
                   key={repo.id}
                   onClick={() => handleRepoClick(repo)}

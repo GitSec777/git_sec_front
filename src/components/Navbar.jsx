@@ -1,41 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 import Login from "../pages/Login";
 import "../../css/components/navbar.css";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
+  const { isAuthenticated, userData, logout } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
   const [showLogout, setShowLogout] = useState(false);
-
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn");
-    const storedUserName = localStorage.getItem("userName");
-    if (loggedIn && storedUserName) {
-      setIsLoggedIn(true);
-      setUserName(storedUserName);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLoginSuccess = (name) => {
-    setIsLoggedIn(true);
-    setUserName(name);
-  };
-
   const handleLogout = () => {
-    localStorage.removeItem("lastOrgName");
-    localStorage.removeItem("lastRepoName");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userName");
-    setIsLoggedIn(false);
-    setUserName("");
+    localStorage.clear();
+    logout();
     setShowLogout(false);
+    navigate("/");
     window.location.reload();
   };
 
@@ -66,22 +50,24 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        {isLoggedIn ? (
-          <div
-            className="user-menu"
-            onMouseEnter={() => setShowLogout(true)}
-            onMouseLeave={() => setShowLogout(false)}
-          >
-            <span className="navbar-user">{userName}</span>
-            {showLogout && (
-              <div className="logout-option" onClick={handleLogout}>
-                Logout
-              </div>
-            )}
-          </div>
-        ) : (
-          <Login onLoginSuccess={handleLoginSuccess} />
-        )}
+        <div className="auth-container">
+          {isAuthenticated ? (
+            <div
+              className="user-menu"
+              onMouseEnter={() => setShowLogout(true)}
+              onMouseLeave={() => setShowLogout(false)}
+            >
+              <span className="username">{userData?.name}</span>
+              {showLogout && (
+                <div className="logout-dropdown">
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Login />
+          )}
+        </div>
         <div
           className={`hamburger ${isOpen ? "open" : ""}`}
           onClick={toggleMenu}
