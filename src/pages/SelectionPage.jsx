@@ -15,14 +15,13 @@ const SelectionPage = () => {
 
   const handleRepoClick = (repo) => {
     setSelectedRepo(repo);
-    console.log("repo is:", repo);
+    setSelectedOrg(repo.owner.login);
     const encodedRepoName = encodeURIComponent(repo.full_name).replace(
       /%2F/g,
       "-"
     );
     navigate(`/report/repo/${encodedRepoName}`);
   };
-  console.log("userData is:", userData.orgs);
 
   if (!userData) return <div className="loading">Loading user data...</div>;
   if (!isAuthenticated) navigate("/login");

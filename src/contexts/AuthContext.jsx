@@ -28,11 +28,15 @@ export const AuthProvider = ({ children }) => {
           setUserData(null);
         } else {
           setIsAuthenticated(true);
-          // Get GitHub data
+          // Get GitHub data using the new endpoint
           const githubDataResponse = await axios.get(
-            "http://127.0.0.1:5000/github_data/get_user_data",
+            "http://127.0.0.1:5000/api/github/user/data",
             {
               withCredentials: true,
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
             }
           );
 
@@ -60,6 +64,8 @@ export const AuthProvider = ({ children }) => {
       });
       setIsAuthenticated(false);
       setUserData(null);
+      setSelectedOrg(null);
+      setSelectedRepo(null);
     } catch (error) {
       console.error("Logout error:", error);
     }

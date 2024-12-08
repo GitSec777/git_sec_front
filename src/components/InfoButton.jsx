@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../../css/components/buttons.css";
 
 const InfoButton = ({ infoText }) => {
   const [showInfo, setShowInfo] = useState(false);
@@ -17,8 +18,14 @@ const InfoButton = ({ infoText }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      ℹ️
-      {showInfo && <div className="info-tooltip">{infoText}</div>}
+      <div className="info-button">
+        i
+        {showInfo && (
+          <div className="info-tooltip">
+            <div className="tooltip-content">{infoText}</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
