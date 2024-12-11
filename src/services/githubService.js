@@ -94,7 +94,7 @@ export const githubService = {
           },
         }
       );
-      console.log("dependency insights", response.data);
+      console.log("dependency insights🌟", response.data);
 
       return response.data;
     } catch (error) {

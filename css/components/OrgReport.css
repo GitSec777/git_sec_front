@@ -30,7 +30,7 @@
   padding: 20px;
   margin-bottom: 20px;
   display: grid;
-  grid-template-columns: 30% 67% 3%;
+  grid-template-columns: 25% 72% 3%;
   box-sizing: border-box;
   overflow: visible;
   position: relative;
@@ -58,7 +58,7 @@
 
 .report-content {
   display: grid;
-  grid-template-columns: 30% 55% 10% 5%;
+  grid-template-columns: 25% 63% 6% 6%;
   align-items: center;
   padding: 10px;
   background-color: rgba(0, 255, 0, 0.05);
