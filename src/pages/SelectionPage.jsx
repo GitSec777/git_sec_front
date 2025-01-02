@@ -4,23 +4,47 @@ import { AuthContext } from "../contexts/AuthContext";
 import "../../css/pages/SelectionPage.css";
 
 const SelectionPage = () => {
-  const { userData, isAuthenticated, setSelectedOrg, setSelectedRepo } =
-    useContext(AuthContext);
+  const {
+    userData,
+    isAuthenticated,
+    setSelectedOrg,
+    setSelectedRepo,
+    setLastViewedReport,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleOrgClick = (org) => {
+  const handleOrgSelect = (org) => {
     setSelectedOrg(org);
+    // Save last viewed report info
+    const reportInfo = {
+      type: "org",
+      id: org.login,
+      org: org,
+    };
+    localStorage.setItem("lastViewedReport", JSON.stringify(reportInfo));
+    setLastViewedReport(reportInfo);
     navigate(`/report/org/${org.login}`);
   };
 
-  const handleRepoClick = (repo) => {
+  const handleRepoSelect = (repo) => {
+    // Save both repo and org info
     setSelectedRepo(repo);
-    setSelectedOrg(repo.owner.login);
-    const encodedRepoName = encodeURIComponent(repo.full_name).replace(
-      /%2F/g,
-      "-"
-    );
-    navigate(`/report/repo/${encodedRepoName}`);
+    const orgLogin = repo.owner.login;
+    setSelectedOrg(repo.owner);
+
+    // Use the orgLogin directly instead of selectedOrg state
+    const reportInfo = {
+      type: "repo",
+      id: repo.name,
+      repo: repo,
+      org: repo.owner, // Use repo.owner instead of selectedOrg
+    };
+
+    localStorage.setItem("lastViewedReport", JSON.stringify(reportInfo));
+    setLastViewedReport(reportInfo);
+
+    // Use orgLogin in the navigation path
+    navigate(`/report/repo/${orgLogin}-${repo.name}`);
   };
 
   if (!userData) return <div className="loading">Loading user data...</div>;
@@ -38,7 +62,7 @@ const SelectionPage = () => {
               {userData.orgs.map((org) => (
                 <li
                   key={org.id}
-                  onClick={() => handleOrgClick(org)}
+                  onClick={() => handleOrgSelect(org)}
                   className="selection-item"
                 >
                   <span className="item-icon">&#128421;</span> {org.login}
@@ -57,7 +81,7 @@ const SelectionPage = () => {
               {userData.repos.map((repo) => (
                 <li
                   key={repo.id}
-                  onClick={() => handleRepoClick(repo)}
+                  onClick={() => handleRepoSelect(repo)}
                   className="selection-item"
                 >
                   <span className="item-icon">&#128194;</span> {repo.name}

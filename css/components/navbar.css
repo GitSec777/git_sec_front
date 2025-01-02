@@ -246,6 +246,7 @@
   position: absolute;
   top: 100%;
   right: 0;
+  margin-top: 10px;
   background-color: #000;
   border: 1px solid #00ff00;
   border-radius: 4px;
@@ -260,11 +261,11 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
-  padding: 8px;
 }
 
 .logout-dropdown button:hover {
   color: #ff0000;
+  transition: color 0.3s ease;
 }
 
 @media (max-width: 768px) {
@@ -291,8 +292,6 @@
   right: 0;
   background-color: #000;
   border: 1px solid #00ff00;
-  border-radius: 4px;
-  padding: 8px;
   z-index: 1000;
   min-width: 100px;
 }
@@ -304,7 +303,6 @@
   cursor: pointer;
   width: 100%;
   text-align: center;
-  padding: 8px;
 }
 
 .logout-dropdown button:hover {

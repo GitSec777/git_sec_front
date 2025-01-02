@@ -31,12 +31,6 @@ button {
   border: none;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: 18px;
-}
-
-button:hover {
-  background-color: var(--secondary-hover-color);
 }
 
 button.disabled {

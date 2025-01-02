@@ -11,6 +11,10 @@ export const AuthProvider = ({ children }) => {
   const [selectedOrg, setSelectedOrg] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [lastViewedReport, setLastViewedReport] = useState(() => {
+    const saved = localStorage.getItem("lastViewedReport");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -82,6 +86,8 @@ export const AuthProvider = ({ children }) => {
         setSelectedRepo,
         logout,
         loadingAuth,
+        lastViewedReport,
+        setLastViewedReport,
       }}
     >
       {children}

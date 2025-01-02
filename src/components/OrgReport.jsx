@@ -88,11 +88,11 @@ const OrgReport = () => {
           title="Basic Information"
           infoText="Basic organization information and identifiers."
         >
-          <div className="report-content">
+          <div className="basic-content">
             <strong>Organization Name:</strong>
             {orgId}
           </div>
-          <div className="report-content">
+          <div className="basic-content">
             <strong>Organization ID:</strong>
             {data.id}
           </div>

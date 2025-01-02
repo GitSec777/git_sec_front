@@ -6,7 +6,8 @@ import "../../css/components/navbar.css";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
-  const { isAuthenticated, userData, logout } = useContext(AuthContext);
+  const { isAuthenticated, userData, logout, lastViewedReport } =
+    useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const navigate = useNavigate();
@@ -23,10 +24,30 @@ const Navbar = () => {
     window.location.reload();
   };
 
+  const handleReportClick = (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      navigate("/");
+      return;
+    }
+
+    if (lastViewedReport) {
+      if (lastViewedReport.type === "org") {
+        navigate(`/report/org/${lastViewedReport.id}`);
+      } else if (lastViewedReport.type === "repo") {
+        navigate(
+          `/report/repo/${lastViewedReport.org.login}-${lastViewedReport.id}`
+        );
+      }
+    } else {
+      navigate("/selection");
+    }
+  };
+
   const navItems = [
     { to: "/", text: "Home" },
     { to: "/selection", text: "Selection" },
-    { to: "/report", text: "Report" },
+    { to: "#", text: "Report", onClick: handleReportClick },
     { to: "/recommendations", text: "Security Recommendation" },
   ];
 
@@ -43,9 +64,15 @@ const Navbar = () => {
           <ul>
             {navItems.map((item, index) => (
               <li key={index}>
-                <Link to={item.to} onClick={() => setIsOpen(false)}>
-                  {item.text}
-                </Link>
+                {item.onClick ? (
+                  <a href={item.to} onClick={item.onClick}>
+                    {item.text}
+                  </a>
+                ) : (
+                  <Link to={item.to} onClick={() => setIsOpen(false)}>
+                    {item.text}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -54,8 +81,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <div
               className="user-menu"
-              onMouseEnter={() => setShowLogout(true)}
-              onMouseLeave={() => setShowLogout(false)}
+              onClick={() => setShowLogout(!showLogout)}
             >
               <span className="username">{userData?.name}</span>
               {showLogout && (
