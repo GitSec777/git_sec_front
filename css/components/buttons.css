@@ -41,6 +41,7 @@
   border-radius: 4px;
   padding: 10px;
   z-index: 1000;
+  pointer-events: none;
 
   animation: fadeIn 1s ease;
 }

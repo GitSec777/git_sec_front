@@ -1,3 +1,5 @@
+@import "./AlertCard.css";
+
 .org-report {
   font-family: "Courier New", Courier, monospace;
   color: #00ff00;
@@ -65,30 +67,50 @@
   gap: 5px;
 }
 
+/* Default layout */
 .report-content {
   display: grid;
-  grid-template-columns: 25% 63% 6% 6%;
-  align-items: center;
+  grid-template-columns: 200px 1fr 50px; /* Fixed first and last columns */
+  gap: 10px;
   padding: 10px;
   background-color: rgba(0, 255, 0, 0.05);
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
-  gap: 10px;
+  max-height: 300px;
+  position: relative;
+  overflow: visible;
 }
 
+/* Style for the first column (labels) */
 .report-content strong {
   grid-column: 1;
-  padding-right: 10px;
+  white-space: normal; /* Allow text to wrap */
+  align-items: center;
 }
 
+.report-content .report-value {
+  grid-column: 2;
+  align-self: center; /* Center vertically */
+  padding: 5px 10px; /* Add some padding */
+  background: rgba(0, 255, 0, 0.1); /* Optional: subtle background */
+  border-radius: 4px; /* Optional: rounded corners */
+}
+
+/* Style for the middle column (content) */
 .report-content > *:not(strong):not(.info-button-container) {
   grid-column: 2;
+  min-width: 0;
 }
 
+/* Style for the last column (info button) */
 .info-button-container {
   grid-column: 3;
   justify-self: end;
+  align-self: start; /* Align to top */
+  grid-row: 1; /* Always stay in first row */
+  position: relative;
+  overflow: visible;
 }
 
 .secure {
@@ -149,7 +171,7 @@ pre {
 }
 
 /* Responsive Design */
-@media (max-width: 1300px) {
+@media (max-width: 1400px) {
   .org-report {
     padding: 10px;
   }
@@ -167,23 +189,6 @@ pre {
     padding-bottom: 10px;
     margin-bottom: 10px;
     text-align: center;
-  }
-
-  .report-content {
-    grid-template-columns: 1fr auto;
-  }
-
-  .report-content strong {
-    grid-column: 1;
-  }
-
-  .report-content > *:not(strong):not(.info-button-container) {
-    grid-column: 1;
-  }
-
-  .info-button-container {
-    grid-column: 2;
-    align-self: start;
   }
 }
 
@@ -209,6 +214,8 @@ pre {
 
   .report-content {
     grid-template-columns: 1fr auto;
+    padding: 15px;
+    gap: 15px;
   }
 
   .report-content strong {
@@ -251,6 +258,7 @@ pre {
 }
 
 .alert-header {
+  margin-top: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -275,6 +283,7 @@ pre {
 
 .severity-badge {
   padding: 4px 8px;
+  margin-right: 8px;
   border-radius: 4px;
   font-size: 0.9em;
   font-weight: bold;

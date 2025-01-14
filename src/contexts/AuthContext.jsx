@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       try {
         // First, check authentication status
         const authResponse = await axios.get(
-          "http://127.0.0.1:5000/auth/check-status",
+          "http://127.0.0.1:5050/auth/check-status",
           {
             withCredentials: true,
           }
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           // Get GitHub data using the new endpoint
           const githubDataResponse = await axios.get(
-            "http://127.0.0.1:5000/api/github/user/data",
+            "http://127.0.0.1:5050/api/github/user/data",
             {
               withCredentials: true,
               headers: {
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.get("http://127.0.0.1:5000/auth/logout", {
+      await axios.get("http://127.0.0.1:5050/auth/logout", {
         withCredentials: true,
       });
       setIsAuthenticated(false);

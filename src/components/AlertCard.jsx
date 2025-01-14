@@ -94,7 +94,7 @@ const AlertCard = ({ alert, type }) => {
           </>
         );
 
-      case "not_configured":
+      case "not configured":
         return (
           <>
             <div className="alert-header">
@@ -112,7 +112,8 @@ const AlertCard = ({ alert, type }) => {
           </>
         );
 
-      case "vul report status":
+      case "Vul report status":
+        console.log("inside Vul report status", alert);
         return (
           <>
             <div className="alert-header">
@@ -126,7 +127,9 @@ const AlertCard = ({ alert, type }) => {
                   alert.status === "enabled" ? "low" : "high"
                 }`}
               >
-                {alert.status === "enabled" ? "Configured" : "Security Risk"}
+                {alert.status === "enabled"
+                  ? "not_configured"
+                  : "Security Risk"}
               </span>
             </div>
             <div className="alert-info">
@@ -184,13 +187,11 @@ const AlertCard = ({ alert, type }) => {
 
   return (
     <div
-      className={`report-content ${
-        type === "not_configured" ? "insecure" : ""
-      }`}
+      className={` ${type === "not configured" ? "insecure" : ""} alert-card`}
     >
       <strong>{type.charAt(0).toUpperCase() + type.slice(1)}:</strong>
       <div className="alert-details">{renderAlertContent()}</div>
-      {type === "not_configured" && (
+      {type === "not configured" && (
         <InfoButton infoText="Enable secret scanning in repository settings to detect and prevent exposure of secrets." />
       )}
     </div>

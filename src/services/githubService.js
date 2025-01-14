@@ -1,13 +1,19 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5050";
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true, // Important for cookies
+});
 
 // Org Routes
 export const githubService = {
   async getOrgNoMFAMembers(org) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/org/${org}/no-mfa-members`,
         {
           withCredentials: true,
@@ -26,7 +32,7 @@ export const githubService = {
 
   async getOrgAdminMembers(org) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/org/${org}/admin-members`,
         {
           withCredentials: true,
@@ -45,7 +51,7 @@ export const githubService = {
 
   async getDependabotAlerts(org, repo) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/repos/${org}/${repo}/dependabot-alerts`,
         {
           withCredentials: true,
@@ -64,7 +70,7 @@ export const githubService = {
 
   async getRepoReport(org, repo) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/repos/${org}/${repo}/report`,
         {
           withCredentials: true,
@@ -83,7 +89,7 @@ export const githubService = {
 
   async getOrgDependebotAlerts(org) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         // /orgs/{org}/dependabot/alerts
         `${API_BASE_URL}/api/org/${org}/dependebot-alerts`,
         {
@@ -105,7 +111,7 @@ export const githubService = {
 
   async getOrgSecurityAdvisories(org) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/org/${org}/security-advisories`,
         {
           withCredentials: true,
@@ -124,7 +130,7 @@ export const githubService = {
 
   async getOrgRepoSettings(org) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/org/${org}/repo-settings`,
         {
           withCredentials: true,
@@ -144,7 +150,7 @@ export const githubService = {
   // Repo Routes
   async getRepoCodeScanningAlerts(org, repo) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/repos/${org}/${repo}/code-scanning/alerts`,
         {
           withCredentials: true,
@@ -163,7 +169,7 @@ export const githubService = {
 
   async getRepoSecretScanningAlerts(org, repo) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/repos/${org}/${repo}/secret-scanning/alerts`,
         {
           withCredentials: true,
@@ -183,7 +189,7 @@ export const githubService = {
 
   async getRepoVulnerabilityAlerts(org, repo) {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `${API_BASE_URL}/api/repos/${org}/${repo}/vulnerability-alerts`,
         {
           withCredentials: true,

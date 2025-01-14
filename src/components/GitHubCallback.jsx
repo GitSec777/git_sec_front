@@ -9,11 +9,12 @@ const GitHubCallback = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const code = searchParams.get("code");
+    console.log("code", code);
 
     if (code) {
       // Send the code to your backend to exchange for an access token
       axios
-        .post("http://127.0.0.1:5000/auth/github/callback", { code })
+        .post("http://127.0.0.1:5050/auth/github/callback", { code })
         .then((response) => {
           console.log("Access Token:", response.data);
           // Handle the response from your backend

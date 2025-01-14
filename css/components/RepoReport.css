@@ -10,7 +10,6 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 255, 0, 0.1);
   max-width: 100%;
-  overflow-x: auto;
 }
 
 /* Add any repo-specific styles here */

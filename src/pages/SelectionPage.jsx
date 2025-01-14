@@ -31,6 +31,7 @@ const SelectionPage = () => {
     setSelectedRepo(repo);
     const orgLogin = repo.owner.login;
     setSelectedOrg(repo.owner);
+    console.log("selected org ");
 
     // Use the orgLogin directly instead of selectedOrg state
     const reportInfo = {

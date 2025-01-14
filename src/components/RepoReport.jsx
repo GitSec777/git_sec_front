@@ -11,7 +11,7 @@ const RepoReport = () => {
   const { selectedRepo, isAuthenticated, selectedOrg } =
     useContext(AuthContext);
   const { repoId } = useParams();
-  const repoIdWithoutOrg = repoId.replace(selectedOrg + "-", "");
+  const repoIdWithoutOrg = repoId.replace(selectedOrg.login + "-", "");
   const [data, setData] = useState(null);
   const navigate = useNavigate(); // Add navigate
   const [repoData, setRepoData] = useState(null);
@@ -38,7 +38,7 @@ const RepoReport = () => {
         // Handle each API call separately
         try {
           const codeScanData = await githubService.getRepoCodeScanningAlerts(
-            selectedOrg,
+            selectedOrg.login,
             repoIdWithoutOrg
           );
           setCodeScanningAlerts(codeScanData || []);
@@ -50,7 +50,7 @@ const RepoReport = () => {
         try {
           const secretScanData =
             await githubService.getRepoSecretScanningAlerts(
-              selectedOrg,
+              selectedOrg.login,
               repoIdWithoutOrg
             );
           setSecretScanningAlerts(secretScanData || []);
@@ -61,10 +61,11 @@ const RepoReport = () => {
 
         try {
           const vulData = await githubService.getRepoVulnerabilityAlerts(
-            selectedOrg,
+            selectedOrg.login,
             repoIdWithoutOrg
           );
           setVulnerabilityAlerts(vulData || []);
+          console.log("vul alerts", vulData);
         } catch (error) {
           console.error("Error fetching vulnerability alerts:", error);
           setVulnerabilityAlerts([]);
@@ -200,7 +201,7 @@ const RepoReport = () => {
           <div className="alerts-container">
             <h3>Secret Scanning Alerts</h3>
             {secretScanningAlerts?.error === "not_configured" ? (
-              <AlertCard type="not_configured" alert={{}} />
+              <AlertCard type="not configured" alert={{}} />
             ) : secretScanningAlerts && secretScanningAlerts.length > 0 ? (
               secretScanningAlerts.map((alert, index) => (
                 <AlertCard key={index} type="secret" alert={alert} />
@@ -217,12 +218,12 @@ const RepoReport = () => {
             <h3>Vulnerability Alerts</h3>
             {vulnerabilityAlerts?.error === "not_configured" ? (
               <AlertCard
-                type="vulnerability_status"
-                alert={{ status: "not_configured" }}
+                type="Vul report status"
+                alert={{ status: "not configured" }}
               />
             ) : vulnerabilityAlerts?.status === "enabled" ? (
               <AlertCard
-                type="vul report status"
+                type="Vul report status"
                 alert={{ status: "enabled" }}
               />
             ) : (

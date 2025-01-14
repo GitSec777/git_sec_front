@@ -84,10 +84,7 @@ const OrgReport = () => {
       </h1>
       <div className="report-container">
         {/* Basic Organization Info */}
-        <ReportSection
-          title="Basic Information"
-          infoText="Basic organization information and identifiers."
-        >
+        <ReportSection title="Basic Information">
           <div className="basic-content">
             <strong>Organization Name:</strong>
             {orgId}
@@ -99,10 +96,7 @@ const OrgReport = () => {
         </ReportSection>
 
         {/* Members Section */}
-        <ReportSection
-          title="Members"
-          infoText="Organization member information and security status."
-        >
+        <ReportSection title="Members">
           <div className="report-content">
             {noMFAMembers && noMFAMembers.length > 0 ? (
               <>
@@ -142,10 +136,7 @@ const OrgReport = () => {
 
         {/* Security Advisories */}
         {securityAdvisories && (
-          <ReportSection
-            title="Security Advisories"
-            infoText="Security advisories indicate known vulnerabilities."
-          >
+          <ReportSection title="Security Advisories">
             {securityAdvisories.length > 0 ? (
               securityAdvisories.map((advisory, index) => (
                 <AlertCard key={index} type="vulnerability" alert={advisory} />
@@ -180,19 +171,13 @@ const OrgReport = () => {
             )}
           </ReportSection>
         ) : (
-          <ReportSection
-            title="Dependency Alerts"
-            infoText="Review and address dependency vulnerabilities to maintain security."
-          >
+          <ReportSection title="Dependency Alerts">
             <div className="success-message">No dependency alerts found</div>
           </ReportSection>
         )}
 
         {/* Repository Settings Section */}
-        <ReportSection
-          title="Repository Settings"
-          infoText="These settings affect the organization's repository security posture."
-        >
+        <ReportSection title="Repository Settings">
           {repoSettings && (
             <>
               <div
@@ -200,8 +185,11 @@ const OrgReport = () => {
                   !repoSettings.members_can_create_repos ? "secure" : "insecure"
                 }`}
               >
-                <strong>Members Can Create Repositories:</strong>{" "}
-                {repoSettings.members_can_create_repos ? "Yes" : "No"}
+                <strong>Members Can Create Repositories: </strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_repos ? "Yes" : "No"}
+                </span>
+
                 <InfoButton infoText="Restricting repository creation can help maintain organization security." />
               </div>
 
@@ -212,8 +200,10 @@ const OrgReport = () => {
                     : "insecure"
                 }`}
               >
-                <strong>Members Can Create Public Repositories:</strong>{" "}
-                {repoSettings.members_can_create_public_repos ? "Yes" : "No"}
+                <strong>Members Can Create Public Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_public_repos ? "Yes" : "No"}
+                </span>
                 <InfoButton infoText="Public repositories can expose sensitive information if not properly managed." />
               </div>
 
@@ -224,8 +214,10 @@ const OrgReport = () => {
                     : "insecure"
                 }`}
               >
-                <strong>Members Can Create Private Repositories:</strong>{" "}
-                {repoSettings.members_can_create_private_repos ? "Yes" : "No"}
+                <strong>Members Can Create Private Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_private_repos ? "Yes" : "No"}
+                </span>
                 <InfoButton infoText="Private repository creation should be restricted to maintain control over sensitive code." />
               </div>
 
@@ -236,20 +228,26 @@ const OrgReport = () => {
                     : "insecure"
                 }`}
               >
-                <strong>Members Can Fork Private Repositories:</strong>{" "}
-                {repoSettings.members_can_fork_private_repos ? "Yes" : "No"}
+                <strong>Members Can Fork Private Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_fork_private_repos ? "Yes" : "No"}
+                </span>
                 <InfoButton infoText="Allowing private repository forking can increase the risk of code exposure." />
               </div>
 
               <div className="report-content">
-                <strong>Default Repository Permission:</strong>{" "}
-                {repoSettings.default_repo_permission}
+                <strong>Default Repository Permission:</strong>
+                <span className="report-value">
+                  {repoSettings.default_repo_permission ? "Admin" : "Member"}
+                </span>
                 <InfoButton infoText="The default permission level granted to organization members for new repositories." />
               </div>
 
               <div className="report-content">
-                <strong>Repository Creation Type:</strong>{" "}
-                {repoSettings.members_allowed_repository_creation_type}
+                <strong>Repository Creation Type:</strong>
+                <span className="report-value">
+                  {repoSettings.members_allowed_repository_creation_type}
+                </span>
                 <InfoButton infoText="The types of repositories that members are allowed to create." />
               </div>
             </>

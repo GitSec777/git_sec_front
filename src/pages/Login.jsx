@@ -7,7 +7,7 @@ const Login = ({ onLoginSuccess }) => {
     const checkAuthStatus = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/auth/check-status",
+          "http://127.0.0.1:5050/auth/check-status",
           {
             withCredentials: true,
           }
@@ -29,7 +29,7 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleGitHubLogin = (e) => {
     e.preventDefault();
-    window.location.href = "http://127.0.0.1:5000/auth/github/login";
+    window.location.href = "http://127.0.0.1:5050/auth/github/login";
   };
 
   return (
