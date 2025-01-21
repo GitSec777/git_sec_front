@@ -19,13 +19,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const API_URL =
+          import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5050";
         // First, check authentication status
-        const authResponse = await axios.get(
-          "http://127.0.0.1:5050/auth/check-status",
-          {
-            withCredentials: true,
-          }
-        );
+        const authResponse = await axios.get(`${API_URL}/auth/check-status`, {
+          withCredentials: true,
+        });
 
         if (authResponse.data.error) {
           setIsAuthenticated(false);
@@ -34,7 +33,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           // Get GitHub data using the new endpoint
           const githubDataResponse = await axios.get(
-            "http://127.0.0.1:5050/api/github/user/data",
+            `${API_URL}/api/github/user/data`,
             {
               withCredentials: true,
               headers: {
@@ -63,7 +62,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.get("http://127.0.0.1:5050/auth/logout", {
+      const API_URL =
+        import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5050";
+      await axios.get(`${API_URL}/auth/logout`, {
         withCredentials: true,
       });
       setIsAuthenticated(false);

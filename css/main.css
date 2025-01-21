@@ -2,6 +2,7 @@
 /* Main CSS Styles */
 
 @import url("common/shared.css");
+@import url("common/ErrorBoundary.css");
 @import url("base/reset.css");
 @import url("global/global.css");
 @import url("layout/layout.css");

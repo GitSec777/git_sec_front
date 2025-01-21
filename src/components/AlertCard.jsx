@@ -113,7 +113,6 @@ const AlertCard = ({ alert, type }) => {
         );
 
       case "Vul report status":
-        console.log("inside Vul report status", alert);
         return (
           <>
             <div className="alert-header">
