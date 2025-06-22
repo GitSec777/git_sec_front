@@ -4,17 +4,23 @@ import axios from "axios";
 
 const GitHubCallback = () => {
   const location = useLocation();
-  console.log("in github call back component", location);
+  const navigate = useNavigate();
+  const [processing, setProcessing] = useState(true);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const code = searchParams.get("code");
-    console.log("code", code);
+    const error = searchParams.get("error");
+
+    if (error) {
+      navigate(`/error?code=${error}&message=Github authorization failed. Please try again.`);
+      return;
+    }
 
     if (code) {
       // Send the code to your backend to exchange for an access token
       axios
-        .post("http://127.0.0.1:5050/auth/github/callback", { code })
+        .post("http://localhost:5050/auth/github/callback", { code })
         .then((response) => {
           console.log("Access Token:", response.data);
           // Handle the response from your backend

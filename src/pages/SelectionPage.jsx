@@ -2,8 +2,10 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import "../../css/pages/SelectionPage.css";
+import { useEffect } from "react";
 
 const SelectionPage = () => {
+  console.log("SelectionPage component rendered");
   const {
     userData,
     isAuthenticated,
@@ -12,6 +14,10 @@ const SelectionPage = () => {
     setLastViewedReport,
   } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("userData in selection page:", userData);
+  }, [userData]);
 
   const handleOrgSelect = (org) => {
     setSelectedOrg(org);
@@ -49,7 +55,8 @@ const SelectionPage = () => {
   };
 
   if (!userData) return <div className="loading">Loading user data...</div>;
-  if (!isAuthenticated) navigate("/login");
+  if (!isAuthenticated) console.log("not authenticated");
+  console.log("userData in selection page:", userData);
   return (
     <div className="selection-page">
       <h1 className="glitch" data-text="Select Target">

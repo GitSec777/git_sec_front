@@ -10,7 +10,9 @@ import AlertCard from "./AlertCard";
 const RepoReport = () => {
   const { selectedRepo, isAuthenticated, selectedOrg } =
     useContext(AuthContext);
+  console.log("selectedOrg", selectedOrg);
   const { repoId } = useParams();
+  console.log("repoId", repoId);
   const repoIdWithoutOrg = repoId.replace(selectedOrg.login + "-", "");
   const [data, setData] = useState(null);
   const navigate = useNavigate(); // Add navigate
@@ -121,9 +123,8 @@ const RepoReport = () => {
           infoText="These settings affect the repository's security posture."
         >
           <div
-            className={`report-content ${
-              data.has_issues_enabled ? "insecure" : ""
-            }`}
+            className={`report-content ${data.has_issues_enabled ? "insecure" : ""
+              }`}
           >
             <strong>Has Issues Enabled:</strong>
             {data.has_issues_enabled ? "Yes" : "No"}
@@ -131,9 +132,8 @@ const RepoReport = () => {
           </div>
 
           <div
-            className={`report-content ${
-              data.has_projects_enabled ? "insecure" : ""
-            }`}
+            className={`report-content ${data.has_projects_enabled ? "insecure" : ""
+              }`}
           >
             <strong>Has Projects Enabled:</strong>
             {data.has_projects_enabled ? "Yes" : "No"}
@@ -149,9 +149,8 @@ const RepoReport = () => {
           </div>
 
           <div
-            className={`report-content ${
-              data.has_wiki_enabled ? "insecure" : ""
-            }`}
+            className={`report-content ${data.has_wiki_enabled ? "insecure" : ""
+              }`}
           >
             <strong>Has Wiki Enabled:</strong>
             {data.has_wiki_enabled ? "Yes" : "No"}

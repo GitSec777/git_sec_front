@@ -1,35 +1,38 @@
 import React, { useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = ({ onLoginSuccess }) => {
+  const { checkAuthStatus } = useAuth();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Check if we're returning from GitHub auth
-    const checkAuthStatus = async () => {
+    const handleAuthCheck = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:5050/auth/check-status",
-          {
-            withCredentials: true,
-          }
-        );
-        if (response.data.isAuthenticated) {
-          localStorage.setItem("userName", response.data.name);
+        const result = await checkAuthStatus();
+        if (result.success) {
+          localStorage.setItem("userName", result.user);
           localStorage.setItem("isLoggedIn", "true");
-          onLoginSuccess(response.data.name);
+          onLoginSuccess(result.user);
+        } else if (result.error && result.error !== "Not authenticated") {
+          // Only redirect for errors other than "not authenticated" (which is normal for logged out users)
+          navigate(`/error?code=auth_check_failed&message=${encodeURIComponent(result.error)}`);
         }
       } catch (error) {
         console.error("Error checking auth status:", error);
+        // Redirect to error page with the error details
+        navigate(`/error?code=auth_exception&message=${encodeURIComponent(error.message || "Unknown error during authentication")}`);
       }
     };
 
     if (localStorage.getItem("isLoggedIn")) {
-      checkAuthStatus();
+      handleAuthCheck();
     }
-  }, [onLoginSuccess]);
+  }, [checkAuthStatus, onLoginSuccess, navigate]);
 
   const handleGitHubLogin = (e) => {
     e.preventDefault();
-    window.location.href = "http://127.0.0.1:5050/auth/github/login";
+    window.location.href = "http://localhost:5050/auth/github/login";
   };
 
   return (

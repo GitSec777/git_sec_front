@@ -1,6 +1,7 @@
 // src/main.jsx
 
 import React from "react";
+import App from "./App.jsx";
 import ReactDOM from "react-dom/client";
 import Layout from "./pages/Layout.jsx";
 import Login from "./pages/Login.jsx";
@@ -32,16 +33,17 @@ const router = createBrowserRouter([
         element: <GitHubCallback />,
       },
       {
+        path: "/recommendations",
+        element: <Recommendations />,
+      },
+      {
         element: <ProtectedRoute />, // Wrapper for protected routes
         children: [
           {
             path: "/selection",
             element: <SelectionPage />,
           },
-          {
-            path: "/recommendations",
-            element: <Recommendations />,
-          },
+
           {
             path: "/report/org/:orgId",
             element: <OrgReport />,

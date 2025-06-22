@@ -1,27 +1,58 @@
-# Build stage
-FROM node:18-alpine as builder
+# This is a multi-stage build. First stage is named 'builder'
+FROM node:18 AS builder
+# Uses Node.js 18 as base image for building
+# 'AS builder' names this stage so we can reference it later
 
 WORKDIR /app
+# Sets the working directory inside the container to /app
+# All subsequent commands will run from this directory
 
-# Copy package files first to leverage Docker cache
-COPY package*.json ./
-RUN npm ci
+# Copy only package files first - this is for build optimization
+COPY package.json package-lock.json ./
+# Copies package.json and package-lock.json to /app
+# Done separately to leverage Docker's cache layer system
+# If these files don't change, Docker will use cached dependencies
 
-# Copy all source code
+# Install npm dependencies
+RUN npm install --verbose --legacy-peer-deps
+# --verbose: Shows detailed output for debugging
+# --legacy-peer-deps: Helps resolve dependency conflicts
+# This layer will be cached if package files don't change
+
+# Copy the rest of your application code
 COPY . .
+# Copies all files from your project to /app in container
+# Done after npm install to prevent cache invalidation
 
-# Build the application
+# Add build argument for API URL
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
+# Build the React application
 RUN npm run build
+# Runs the build script defined in package.json
+# Creates optimized production files in /app/dist
 
-# Production stage
+# Start second stage - production image
 FROM nginx:alpine
+# Uses lightweight nginx alpine image for serving the app
+# This creates a new, clean image without build dependencies
 
-# Copy built assets from builder stage
+# Copy built files from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
+# Copies only the built files from the builder stage
+# --from=builder references the first stage
+# Copies from /app/dist to nginx's serving directory
 
-# Copy nginx configuration if needed
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copies your custom nginx configuration
+# This configures how nginx serves your application
 
 EXPOSE 80
+# Documents that the container will listen on port 80
+# This is more for documentation, doesn't actually open the port
 
 CMD ["nginx", "-g", "daemon off;"]
+# The command that runs when container starts
+# Starts nginx in the foreground (daemon off)

@@ -26,6 +26,8 @@ const Navbar = () => {
 
   const handleReportClick = (e) => {
     e.preventDefault();
+    console.log("lastViewedReport", lastViewedReport);
+    console.log("isAuthenticated", isAuthenticated);
     if (!isAuthenticated) {
       navigate("/");
       return;

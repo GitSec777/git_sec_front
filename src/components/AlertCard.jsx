@@ -67,9 +67,8 @@ const AlertCard = ({ alert, type }) => {
                 {alert.security_advisory?.summary || "Unknown Vulnerability"}
               </span>
               <span
-                className={`severity-badge ${
-                  alert.security_advisory?.severity || "medium"
-                }`}
+                className={`severity-badge ${alert.security_advisory?.severity || "medium"
+                  }`}
               >
                 {alert.security_advisory?.severity || "medium"}
               </span>
@@ -122,9 +121,8 @@ const AlertCard = ({ alert, type }) => {
                   : "Vulnerability Alerts Not Configured"}
               </span>
               <span
-                className={`severity-badge ${
-                  alert.status === "enabled" ? "low" : "high"
-                }`}
+                className={`severity-badge ${alert.status === "enabled" ? "low" : "high"
+                  }`}
               >
                 {alert.status === "enabled"
                   ? "not_configured"
@@ -132,7 +130,7 @@ const AlertCard = ({ alert, type }) => {
               </span>
             </div>
             <div className="alert-info">
-              <p>
+              <p className={`${alert.status === "enabled" ? "" : "insecure"}`}>
                 {alert.status === "enabled"
                   ? "Repository has vulnerability alerts enabled. You will be notified of any vulnerabilities found."
                   : "This repository does not have vulnerability alerts enabled. Enable them to get notified of security vulnerabilities."}
@@ -188,8 +186,10 @@ const AlertCard = ({ alert, type }) => {
     <div
       className={` ${type === "not configured" ? "insecure" : ""} alert-card`}
     >
-      <strong>{type.charAt(0).toUpperCase() + type.slice(1)}:</strong>
-      <div className="alert-details">{renderAlertContent()}</div>
+      <div className="alert-details">
+        <strong>  {type.charAt(0).toUpperCase() + type.slice(1)}:</strong>
+
+        {renderAlertContent()}</div>
       {type === "not configured" && (
         <InfoButton infoText="Enable secret scanning in repository settings to detect and prevent exposure of secrets." />
       )}

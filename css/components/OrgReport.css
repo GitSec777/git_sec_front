@@ -257,6 +257,10 @@ pre {
   width: 100%;
 }
 
+.alert-details strong {
+  padding-left: 5px;
+}
+
 .alert-header {
   margin-top: 12px;
   display: flex;
@@ -264,6 +268,7 @@ pre {
   align-items: center;
   margin-bottom: 10px;
   width: 100%;
+  padding-left: 5px;
 }
 
 .alert-title {

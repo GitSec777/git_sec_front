@@ -1,14 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "./components/Navbar";
 import ErrorBoundary from "./common/ErrorBoundary";
-import Home from "./pages/Home";
-import SelectionPage from "./pages/SelectionPage";
-import RepoReport from "./components/RepoReport";
-import OrgReport from "./components/OrgReport";
-import Recommendations from "./pages/Recommendations";
-import Login from "./pages/Login";
+import { Outlet } from "react-router-dom";
 
 const App = () => {
   return (
@@ -23,17 +17,9 @@ const App = () => {
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
       </Helmet>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/selection" element={<SelectionPage />} />
-          <Route path="/report/repo/:repoId" element={<RepoReport />} />
-          <Route path="/report/org/:orgId" element={<OrgReport />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Router>
+      <Navbar />
+      {/* Render children from the router */}
+      <Outlet />
     </ErrorBoundary>
   );
 };
