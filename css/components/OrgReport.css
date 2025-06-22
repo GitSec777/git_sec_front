@@ -1,0 +1,508 @@
+@import "./AlertCard.css";
+
+.org-report {
+  font-family: "Courier New", Courier, monospace;
+  color: #00ff00;
+  padding: 20px;
+  background-color: #000;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 255, 0, 0.1);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.org-report h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.report-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-section {
+  width: 100%;
+  background-color: #111;
+  border: 1px solid #00ff00;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 25% 72% 3%;
+  box-sizing: border-box;
+  overflow: visible;
+  position: relative;
+}
+
+.report-section h2 {
+  color: #00ff00;
+  padding-right: 20px;
+}
+
+.org-report-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 10px;
+}
+
+.advisory-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.basic-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(0, 255, 0, 0.05);
+  gap: 5px;
+}
+
+/* Default layout */
+.report-content {
+  display: grid;
+  grid-template-columns: 200px 1fr 50px; /* Fixed first and last columns */
+  gap: 10px;
+  padding: 10px;
+  background-color: rgba(0, 255, 0, 0.05);
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 300px;
+  position: relative;
+  overflow: visible;
+}
+
+/* Style for the first column (labels) */
+.report-content strong {
+  grid-column: 1;
+  white-space: normal; /* Allow text to wrap */
+  align-items: center;
+}
+
+.report-content .report-value {
+  grid-column: 2;
+  align-self: center; /* Center vertically */
+  padding: 5px 10px; /* Add some padding */
+  background: rgba(0, 255, 0, 0.1); /* Optional: subtle background */
+  border-radius: 4px; /* Optional: rounded corners */
+}
+
+/* Style for the middle column (content) */
+.report-content > *:not(strong):not(.info-button-container) {
+  grid-column: 2;
+  min-width: 0;
+}
+
+/* Style for the last column (info button) */
+.info-button-container {
+  grid-column: 3;
+  justify-self: end;
+  align-self: start; /* Align to top */
+  grid-row: 1; /* Always stay in first row */
+  position: relative;
+  overflow: visible;
+}
+
+.secure {
+  color: #00ff00;
+  border-left: 4px solid #00ff00;
+}
+
+.insecure {
+  color: #ff0000;
+  border-left: 4px solid #ff0000;
+}
+
+.member-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.member-list li {
+  padding: 8px;
+  margin: 5px 0;
+  background-color: rgba(0, 255, 0, 0.05);
+  border-radius: 4px;
+}
+
+.success-message {
+  color: #00ff00;
+  padding: 10px;
+  background-color: rgba(0, 255, 0, 0.1);
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+.error {
+  color: #ff0000;
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 4px;
+  width: 100%;
+}
+
+pre {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #00ff00;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .org-report {
+    padding: 10px;
+  }
+
+  .report-section {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .report-section h2 {
+    border-right: none;
+    border-bottom: 1px solid #00ff00;
+    padding-right: 0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .org-report {
+    padding: 10px;
+  }
+
+  .report-section {
+    grid-template-columns: 100%;
+    padding: 15px;
+  }
+
+  .report-section h2 {
+    border-right: none;
+    border-bottom: 1px solid #00ff00;
+    padding-right: 0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .report-content {
+    grid-template-columns: 1fr auto;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .report-content strong {
+    grid-column: 1;
+  }
+
+  .report-content > *:not(strong):not(.info-button-container) {
+    grid-column: 1;
+  }
+
+  .info-button-container {
+    grid-column: 2;
+    align-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .org-report {
+    padding: 5px;
+  }
+
+  .report-section {
+    padding: 10px;
+  }
+
+  .report-section h2 {
+    font-size: 18px;
+  }
+
+  .report-content {
+    padding: 8px;
+  }
+}
+
+.alert-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.alert-details strong {
+  padding-left: 5px;
+}
+
+.alert-header {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+  padding-left: 5px;
+}
+
+.alert-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #00ff00;
+}
+
+.alert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 255, 0, 0.05);
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.severity-badge {
+  padding: 4px 8px;
+  margin-right: 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.severity-badge.critical {
+  background-color: #ff0000;
+  color: white;
+}
+
+.severity-badge.high {
+  background-color: #ff4444;
+  color: white;
+}
+
+.severity-badge.medium {
+  background-color: #ffaa00;
+  color: black;
+}
+
+.severity-badge.low {
+  background-color: #ffdd00;
+  color: black;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .report-content,
+  .basic-content {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .report-content strong,
+  .basic-content strong {
+    padding-right: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+    padding-bottom: 5px;
+  }
+
+  .alert-details {
+    width: 100%;
+  }
+
+  .alert-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .alert-info {
+    padding: 12px;
+  }
+
+  .info-button-container {
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+
+  .severity-badge {
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .alert-title {
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Adjust spacing for nested content */
+  .alert-info > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .label {
+    font-weight: bold;
+    color: #00ff00;
+    margin-bottom: 2px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .report-content {
+    padding: 12px;
+  }
+
+  .alert-info {
+    padding: 10px;
+  }
+
+  .severity-badge {
+    padding: 3px 6px;
+    font-size: 0.8em;
+  }
+
+  .alert-title {
+    font-size: 1em;
+  }
+}
+
+.label {
+  color: #888;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.alert-summary {
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+.alert-summary p {
+  margin: 8px 0 0 0;
+  line-height: 1.4;
+}
+
+.alert-critical {
+  border-left: 4px solid #ff0000;
+}
+
+.alert-high {
+  border-left: 4px solid #ff4444;
+}
+
+.alert-medium {
+  border-left: 4px solid #ff8000;
+}
+
+.alert-low {
+  border-left: 4px solid #ffdd00;
+}
+
+.alerts-container {
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+}
+
+.alerts-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.alerts-container::-webkit-scrollbar-track {
+  background: rgba(0, 255, 0, 0.1);
+  border-radius: 4px;
+}
+
+.alerts-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 0, 0.3);
+  border-radius: 4px;
+}
+
+.alerts-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 0, 0.5);
+}
+
+.alerts-container.scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.alerts-container.non-scrollable {
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.report-section:has(h2:contains("Repository Settings")) .report-content {
+  display: grid;
+  grid-template-columns: 30% 60% 10%;
+  align-items: center;
+}
+
+.report-section:has(h2:contains("Repository Settings")) .report-content strong {
+  flex: unset;
+  padding-right: 0;
+}
+
+.report-section:has(h2:contains("Repository Settings")) .info-button-container {
+  margin-left: 0;
+  justify-self: end;
+}
+
+.info-button-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  height: 100%;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .report-section:has(h2:contains("Repository Settings")) .report-content {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+
+  .report-section:has(h2:contains("Repository Settings"))
+    .report-content
+    strong {
+    grid-column: 1;
+  }
+
+  .report-section:has(h2:contains("Repository Settings"))
+    .info-button-container {
+    grid-column: 2;
+    align-self: start;
+  }
+}

@@ -1,101 +1,107 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
+import "../../css/pages/SelectionPage.css";
+import { useEffect } from "react";
 
 const SelectionPage = () => {
-  const [repos, setRepos] = useState([]);
-  const [orgs, setOrgs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  console.log("SelectionPage component rendered");
+  const {
+    userData,
+    isAuthenticated,
+    setSelectedOrg,
+    setSelectedRepo,
+    setLastViewedReport,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:5000/get_github_token",
-          { withCredentials: true }
-        );
-        const accessToken = response.data.github_token;
+    console.log("userData in selection page:", userData);
+  }, [userData]);
 
-        if (accessToken) {
-          const repoResponse = await axios.get(
-            "https://api.github.com/user/repos",
-            {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            }
-          );
-          const orgResponse = await axios.get(
-            "https://api.github.com/user/orgs",
-            {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            }
-          );
-
-          setRepos(repoResponse.data);
-          setOrgs(orgResponse.data);
-
-          // Cache the fetched data in localStorage
-          localStorage.setItem("reposData", JSON.stringify(repoResponse.data));
-          localStorage.setItem("orgsData", JSON.stringify(orgResponse.data));
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
+  const handleOrgSelect = (org) => {
+    setSelectedOrg(org);
+    // Save last viewed report info
+    const reportInfo = {
+      type: "org",
+      id: org.login,
+      org: org,
     };
-
-    fetchData();
-  }, []);
-
-  const handleOrgClick = (org) => {
-    console.log(`Navigate to /report/org/${org.login}`);
-
+    localStorage.setItem("lastViewedReport", JSON.stringify(reportInfo));
+    setLastViewedReport(reportInfo);
     navigate(`/report/org/${org.login}`);
   };
 
-  const handleRepoClick = (repo) => {
-    navigate(`/report/repo/${repo.full_name.replace(/\//g, "-")}`);
+  const handleRepoSelect = (repo) => {
+    // Save both repo and org info
+    setSelectedRepo(repo);
+    const orgLogin = repo.owner.login;
+    setSelectedOrg(repo.owner);
+    console.log("selected org ");
+
+    // Use the orgLogin directly instead of selectedOrg state
+    const reportInfo = {
+      type: "repo",
+      id: repo.name,
+      repo: repo,
+      org: repo.owner, // Use repo.owner instead of selectedOrg
+    };
+
+    localStorage.setItem("lastViewedReport", JSON.stringify(reportInfo));
+    setLastViewedReport(reportInfo);
+
+    // Use orgLogin in the navigation path
+    navigate(`/report/repo/${orgLogin}-${repo.name}`);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
-
+  if (!userData) return <div className="loading">Loading user data...</div>;
+  if (!isAuthenticated) console.log("not authenticated");
+  console.log("userData in selection page:", userData);
   return (
     <div className="selection-page">
-      <h1>Select Organization or Repository</h1>
-      <section>
-        <h2>Organizations</h2>
-        {orgs.length > 0 ? (
-          <ul>
-            {orgs.map((org) => (
-              <li key={org.id} onClick={() => handleOrgClick(org)}>
-                {org.login}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No organizations found.</p>
-        )}
-      </section>
+      <h1 className="glitch" data-text="Select Target">
+        Select Target
+      </h1>
+      <div className="selection-container">
+        <section className="selection-section">
+          <h2 className="section-title">Organizations</h2>
+          {userData.orgs && userData.orgs.length > 0 ? (
+            <ul className="selection-list">
+              {userData.orgs.map((org) => (
+                <li
+                  key={org.id}
+                  onClick={() => handleOrgSelect(org)}
+                  className="selection-item"
+                >
+                  <span className="item-icon">&#128421;</span> {org.login}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">No organizations found.</p>
+          )}
+        </section>
 
-      <section>
-        <h2>Repositories</h2>
-        {repos.length > 0 ? (
-          <ul>
-            {repos.map((repo) => (
-              <li key={repo.id} onClick={() => handleRepoClick(repo)}>
-                {repo.name} - <strong>Owner:</strong> {repo.owner.login}{" "}
-                {/* Show owner info */}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No repositories found.</p>
-        )}
-      </section>
+        <section className="selection-section">
+          <h2 className="section-title">Repositories</h2>
+          {userData.repos && userData.repos.length > 0 ? (
+            <ul className="selection-list">
+              {userData.repos.map((repo) => (
+                <li
+                  key={repo.id}
+                  onClick={() => handleRepoSelect(repo)}
+                  className="selection-item"
+                >
+                  <span className="item-icon">&#128194;</span> {repo.name}
+                  <span className="item-owner">Owner: {repo.owner.login}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-data">No repositories found.</p>
+          )}
+        </section>
+      </div>
     </div>
   );
 };

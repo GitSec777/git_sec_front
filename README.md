@@ -1,8 +1,15 @@
-# React + Vite
+## Security Configuration
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Environment Variables
 
-Currently, two official plugins are available:
+Required environment variables:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- `VITE_API_BASE_URL`: Backend API URL
+- `GITHUB_CLIENT_ID`: GitHub OAuth App client ID
+- `GITHUB_CLIENT_SECRET`: GitHub OAuth App secret
+
+### Setup
+
+1. Copy `.env.example` to `.env.local`
+2. Fill in your environment variables
+3. Never commit `.env` files with secrets

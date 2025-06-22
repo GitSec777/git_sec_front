@@ -1,108 +1,258 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import InfoButton from "./InfoButton";
+import ReportSection from "./ReportSection";
+import "../../css/components/OrgReport.css";
+import { githubService } from "../services/githubService";
+import AlertCard from "./AlertCard";
 
-const OrgReport = ({ data }) => {
-  // Helper function to assign compliant or non-compliant class
+const OrgReport = () => {
+  const { orgId } = useParams();
+  const { selectedOrg, isAuthenticated } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [noMFAMembers, setNoMFAMembers] = useState([]);
+  const [adminMembers, setAdminMembers] = useState([]);
+  const [dependencyAlerts, setDependencyAlerts] = useState(null);
+  const [securityAdvisories, setSecurityAdvisories] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [repoSettings, setRepoSettings] = useState(null);
 
-  const getComplianceClass = (condition) =>
-    condition ? "compliant" : "non-compliant";
+  useEffect(() => {
+    if (!selectedOrg || !isAuthenticated) {
+      navigate("/selection");
+      return;
+    }
+
+    const fetchOrgData = async () => {
+      setIsLoading(true);
+      try {
+        setData(selectedOrg);
+
+        // Fetch all data in parallel
+        const [
+          noMFAData,
+          adminData,
+          dependencyAlerts,
+          advisoriesData,
+          repoSettingsData,
+        ] = await Promise.all([
+          githubService.getOrgNoMFAMembers(orgId),
+          githubService.getOrgAdminMembers(orgId),
+          githubService.getOrgDependebotAlerts(orgId),
+          githubService.getOrgSecurityAdvisories(orgId),
+          githubService.getOrgRepoSettings(orgId),
+        ]);
+
+        if (noMFAData) {
+          setNoMFAMembers(noMFAData);
+        }
+        if (adminData) {
+          setAdminMembers(adminData);
+        }
+        if (dependencyAlerts) {
+          setDependencyAlerts(dependencyAlerts);
+        }
+        if (advisoriesData) {
+          setSecurityAdvisories(advisoriesData);
+        }
+        if (repoSettingsData) {
+          setRepoSettings(repoSettingsData);
+        }
+      } catch (error) {
+        console.error("Error fetching org data:", error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrgData();
+  }, [orgId, selectedOrg, navigate, isAuthenticated]);
+
+  if (isLoading)
+    return <div className="loading">Loading organization data...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+  if (!data) return <div className="error">No organization data available</div>;
 
   return (
     <div className="org-report">
-      <h2>Organization Report: {data.login}</h2>
-      <div className="org-report-details">
-        {/* Two-Factor Authentication */}
-        <div
-          className={`report-section ${getComplianceClass(
-            data.two_factor_requirement_enabled
-          )}`}
-        >
-          <InfoButton infoText="Two-factor authentication is a security feature that helps protect your account from unauthorized access." />
-          <strong>Two-Factor Requirement Enabled:</strong>{" "}
-          {data.two_factor_requirement_enabled ? "Yes" : "No"}
-        </div>
+      <h1 className="glitch" data-text="Organization Report">
+        Organization Report
+      </h1>
+      <div className="report-container">
+        {/* Basic Organization Info */}
+        <ReportSection title="Basic Information">
+          <div className="basic-content">
+            <strong>Organization Name:</strong>
+            {orgId}
+          </div>
+          <div className="basic-content">
+            <strong>Organization ID:</strong>
+            {data.id}
+          </div>
+        </ReportSection>
 
-        {/* Members Can Fork Private Repositories */}
-        <div
-          className={`report-section ${getComplianceClass(
-            !data.members_can_fork_private_repositories
-          )}`}
-        >
-          <InfoButton infoText="Allowing members to fork private repositories can increase the risk of data exposure." />
-          <strong>Members Can Fork Private Repositories:</strong>{" "}
-          {data.members_can_fork_private_repositories ? "Yes" : "No"}
-        </div>
+        {/* Members Section */}
+        <ReportSection title="Members">
+          <div className="report-content">
+            {noMFAMembers && noMFAMembers.length > 0 ? (
+              <>
+                <strong>Members Without 2FA:</strong>
+                <ul className="member-list">
+                  {noMFAMembers.map((member) => (
+                    <li key={member.id}>{member.login}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <>
+                <strong>Members Without 2FA:</strong>
+                <div className="success-message">
+                  All members have 2FA enabled
+                </div>
+              </>
+            )}
+            <InfoButton infoText="Members who haven't enabled two-factor authentication pose a security risk." />
+          </div>
+          <div className="report-content">
+            {adminMembers && adminMembers.length > 0 ? (
+              <>
+                <strong>Admin Members:</strong>
+                <ul className="member-list">
+                  {adminMembers.map((member) => (
+                    <li key={member.id}>{member.login}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <div>No admin members found</div>
+            )}
+            <InfoButton infoText="Organization administrators have full access to all repositories and settings." />
+          </div>
+        </ReportSection>
 
-        {/* Web Commit Signoff Required */}
-        <div
-          className={`report-section ${getComplianceClass(
-            data.web_commit_signoff_required
-          )}`}
-        >
-          <InfoButton infoText="Requiring web commit signoff can help ensure that all commits are authorized." />
-          <strong>Web Commit Signoff Required:</strong>{" "}
-          {data.web_commit_signoff_required ? "Yes" : "No"}
-        </div>
+        {/* Security Advisories */}
+        {securityAdvisories && (
+          <ReportSection title="Security Advisories">
+            {securityAdvisories.length > 0 ? (
+              securityAdvisories.map((advisory, index) => (
+                <AlertCard key={index} type="vulnerability" alert={advisory} />
+              ))
+            ) : (
+              <div className="success-message">
+                No security advisories found
+              </div>
+            )}
+          </ReportSection>
+        )}
 
-        {/* Members Allowed Repository Creation Type */}
-        <div className={`report-section`}>
-          <InfoButton infoText="Restricting repository creation types can help maintain organization standards." />
-          <strong>Members Allowed Repository Creation Type:</strong>{" "}
-          {data.members_allowed_repository_creation_type}
-        </div>
+        {/* Dependency Alerts */}
+        {dependencyAlerts && dependencyAlerts.length > 0 ? (
+          <ReportSection
+            title="Dependency Alerts"
+            infoText="Review and address dependency vulnerabilities to maintain security."
+          >
+            <div
+              className={`alerts-container ${
+                dependencyAlerts.length > 3 ? "scrollable" : "non-scrollable"
+              }`}
+            >
+              {dependencyAlerts.map((alert, index) => (
+                <AlertCard key={index} type="dependabot" alert={alert} />
+              ))}
+            </div>
+            {dependencyAlerts.length > 3 && (
+              <div className="alerts-count">
+                Showing {dependencyAlerts.length} alerts
+              </div>
+            )}
+          </ReportSection>
+        ) : (
+          <ReportSection title="Dependency Alerts">
+            <div className="success-message">No dependency alerts found</div>
+          </ReportSection>
+        )}
 
-        {/* Organization Verification */}
-        <div
-          className={`report-section ${getComplianceClass(data.is_verified)}`}
-        >
-          <InfoButton infoText="Verified organizations have confirmed their identity with GitHub." />
-          <strong>Organization Verified:</strong>{" "}
-          {data.is_verified ? "Yes" : "No"}
-        </div>
+        {/* Repository Settings Section */}
+        <ReportSection title="Repository Settings">
+          {repoSettings && (
+            <>
+              <div
+                className={`report-content ${
+                  !repoSettings.members_can_create_repos ? "secure" : "insecure"
+                }`}
+              >
+                <strong>Members Can Create Repositories: </strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_repos ? "Yes" : "No"}
+                </span>
 
-        {/* Owned Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Owned private repositories are repositories owned by the organization." />
-          <strong>Owned Private Repositories:</strong>{" "}
-          {data.owned_private_repos}
-        </div>
+                <InfoButton infoText="Restricting repository creation can help maintain organization security." />
+              </div>
 
-        {/* Total Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Total private repositories are the sum of owned and private repositories." />
-          <strong>Total Private Repositories:</strong>{" "}
-          {data.total_private_repos}
-        </div>
+              <div
+                className={`report-content ${
+                  !repoSettings.members_can_create_public_repos
+                    ? "secure"
+                    : "insecure"
+                }`}
+              >
+                <strong>Members Can Create Public Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_public_repos ? "Yes" : "No"}
+                </span>
+                <InfoButton infoText="Public repositories can expose sensitive information if not properly managed." />
+              </div>
 
-        {/* Plan Name */}
-        <div className="report-section">
-          <InfoButton infoText="The plan name indicates the organization's GitHub subscription level." />
-          <strong>Plan Name:</strong> {data.plan_name}
-        </div>
+              <div
+                className={`report-content ${
+                  !repoSettings.members_can_create_private_repos
+                    ? "secure"
+                    : "insecure"
+                }`}
+              >
+                <strong>Members Can Create Private Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_create_private_repos ? "Yes" : "No"}
+                </span>
+                <InfoButton infoText="Private repository creation should be restricted to maintain control over sensitive code." />
+              </div>
 
-        {/* Filled Seats */}
-        <div className="report-section">
-          <infoButton infoText="Filled seats are the number of users in the organization." />
-          <strong>Filled Seats:</strong> {data.filled_seats}
-        </div>
+              <div
+                className={`report-content ${
+                  !repoSettings.members_can_fork_private_repos
+                    ? "secure"
+                    : "insecure"
+                }`}
+              >
+                <strong>Members Can Fork Private Repositories:</strong>
+                <span className="report-value">
+                  {repoSettings.members_can_fork_private_repos ? "Yes" : "No"}
+                </span>
+                <InfoButton infoText="Allowing private repository forking can increase the risk of code exposure." />
+              </div>
 
-        {/* Plan Private Repositories */}
-        <div className="report-section">
-          <InfoButton infoText="Plan private repositories are the number of private repositories allowed by the organization's GitHub subscription level." />
-          <strong>Plan Private Repositories:</strong> {data.plan_private_repos}
-        </div>
+              <div className="report-content">
+                <strong>Default Repository Permission:</strong>
+                <span className="report-value">
+                  {repoSettings.default_repo_permission ? "Admin" : "Member"}
+                </span>
+                <InfoButton infoText="The default permission level granted to organization members for new repositories." />
+              </div>
 
-        {/* Organization Created At */}
-        <div className="report-section">
-          <strong>Created At:</strong>{" "}
-          {new Date(data.created_at).toLocaleDateString()}
-        </div>
-
-        {/* Organization Updated At */}
-        <div className="report-section">
-          <strong>Updated At:</strong>{" "}
-          {new Date(data.updated_at).toLocaleDateString()}
-        </div>
+              <div className="report-content">
+                <strong>Repository Creation Type:</strong>
+                <span className="report-value">
+                  {repoSettings.members_allowed_repository_creation_type}
+                </span>
+                <InfoButton infoText="The types of repositories that members are allowed to create." />
+              </div>
+            </>
+          )}
+        </ReportSection>
       </div>
     </div>
   );

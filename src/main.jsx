@@ -1,11 +1,19 @@
+// src/main.jsx
+
 import React from "react";
+import App from "./App.jsx";
 import ReactDOM from "react-dom/client";
 import Layout from "./pages/Layout.jsx";
-import Report from "./components/report.jsx";
 import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+import Recommendations from "./pages/Recommendations.jsx";
 import SelectionPage from "./pages/SelectionPage.jsx";
 import GitHubCallback from "./components/GitHubCallback.jsx";
+import OrgReport from "./components/OrgReport.jsx";
+import RepoReport from "./components/RepoReport.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuthProvider from "./contexts/AuthContext.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,31 +22,37 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Login />, // Default home route (could be SelectionPage or Login instead)
-      },
-      {
-        path: "/report",
-        element: <Report />,
+        element: <Home />,
       },
       {
         path: "/login",
         element: <Login />,
       },
       {
-        path: "/selection",
-        element: <SelectionPage />,
-      },
-      {
         path: "/auth/github/callback",
         element: <GitHubCallback />,
       },
       {
-        path: "/report/org/:orgName", // Dynamic route for organization reports
-        element: <Report />,
+        path: "/recommendations",
+        element: <Recommendations />,
       },
       {
-        path: "/report/repo/:repoName", // Dynamic route for repository reports
-        element: <Report />,
+        element: <ProtectedRoute />, // Wrapper for protected routes
+        children: [
+          {
+            path: "/selection",
+            element: <SelectionPage />,
+          },
+
+          {
+            path: "/report/org/:orgId",
+            element: <OrgReport />,
+          },
+          {
+            path: "/report/repo/:repoId",
+            element: <RepoReport />,
+          },
+        ],
       },
     ],
   },
@@ -49,5 +63,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 );

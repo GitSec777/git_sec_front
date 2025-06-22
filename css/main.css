@@ -1,4 +1,8 @@
 /* main.css */
+/* Main CSS Styles */
+
+@import url("common/shared.css");
+@import url("common/ErrorBoundary.css");
 @import url("base/reset.css");
 @import url("global/global.css");
 @import url("layout/layout.css");
@@ -6,6 +10,3 @@
 @import url("components/buttons.css");
 @import url("pages/home.css");
 @import url("pages/report.css");
-@import url("pages/login.css");
-
-/*@import url("pages/about.css"); */
