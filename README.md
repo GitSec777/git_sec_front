@@ -8,7 +8,7 @@ Required environment variables:
 - `GITHUB_CLIENT_ID`: GitHub OAuth App client ID
 - `GITHUB_CLIENT_SECRET`: GitHub OAuth App secret
 
-### Setup
+#### Setup
 
 1. Copy `.env.example` to `.env.local`
 2. Fill in your environment variables
